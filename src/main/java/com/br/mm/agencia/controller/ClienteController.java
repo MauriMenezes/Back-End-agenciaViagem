@@ -2,6 +2,7 @@ package com.br.mm.agencia.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -62,12 +63,18 @@ public class ClienteController {
   @PostMapping("/cadastrar")
   public ResponseEntity<ClienteDTO> cadastrar(@RequestBody @Valid ClienteForm form, UriComponentsBuilder uriBuilder) {
 
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    Cliente cliente = form.converter(encoder);
-    clienteRepository.save(cliente);
+    Optional<Cliente> cli = clienteRepository.findByEmail(form.getEmail());
 
-    URI uri = uriBuilder.path("/agenda/cadastrar/{id}").buildAndExpand(cliente.getId()).toUri();
-    return ResponseEntity.created(uri).body(new ClienteDTO(cliente));
+    if (cli.isPresent()) {
+      return ResponseEntity.badRequest().build();
+    } else {
+
+      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+      Cliente cliente = form.converter(encoder);
+      clienteRepository.save(cliente);
+      URI uri = uriBuilder.path("/agenda/cadastrar/{id}").buildAndExpand(cliente.getId()).toUri();
+      return ResponseEntity.created(uri).body(new ClienteDTO(cliente));
+    }
 
   }
 }
