@@ -19,6 +19,7 @@ import com.br.mm.agencia.model.Passagem;
 import com.br.mm.agencia.repository.ClienteRepository;
 import com.br.mm.agencia.repository.CompanhiaRepository;
 import com.br.mm.agencia.repository.PassagemRepository;
+import com.br.mm.agencia.repository.EscalaRepository;
 
 @Controller
 @ResponseBody
@@ -31,11 +32,14 @@ public class PassagemController {
   ClienteRepository clienteRepository;
   @Autowired
   CompanhiaRepository companhiaRepository;
+  @Autowired
+  EscalaRepository escalaRepository;
 
   @PostMapping("/cadastrar")
+
   public ResponseEntity<PassagemDTO> cadastrar(@RequestBody @Valid PassagemForm form, UriComponentsBuilder uriBuilder) {
 
-    Passagem passagem = form.converter(clienteRepository, companhiaRepository);
+    Passagem passagem = form.converter(clienteRepository, companhiaRepository, escalaRepository);
     passagemRepository.save(passagem);
 
     URI uri = uriBuilder.path("/cadastrar").buildAndExpand(passagem.getId()).toUri();

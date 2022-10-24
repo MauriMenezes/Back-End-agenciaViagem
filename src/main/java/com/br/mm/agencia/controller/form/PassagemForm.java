@@ -6,65 +6,58 @@ import javax.validation.constraints.NotNull;
 import com.br.mm.agencia.model.Cliente;
 import com.br.mm.agencia.model.Companhia;
 import com.br.mm.agencia.model.Passagem;
+import com.br.mm.agencia.model.Escala;
 import com.br.mm.agencia.repository.ClienteRepository;
 import com.br.mm.agencia.repository.CompanhiaRepository;
+import com.br.mm.agencia.repository.EscalaRepository;
 
 public class PassagemForm {
 
-  @NotNull
-  @NotEmpty 
-  private String Origem;
+  private long escala;
   @NotNull
   @NotEmpty
-  private String Destino;
+  private String companhia;
   @NotNull
   @NotEmpty
-  private String companhiaNome;
-  @NotNull
-  @NotEmpty
-  private String ClienteNome;
+  private String cliente;
 
-  public String getOrigem() {
-    return this.Origem;
+  public long getescala() {
+    return this.escala;
   }
 
-  public void setOrigem(String Origem) {
-    this.Origem = Origem;
+  public void setEscala(long escala) {
+    this.escala = escala;
   }
 
-  public String getDestino() {
-    return this.Destino;
+  public String getCompanhia() {
+    return this.companhia;
   }
 
-  public void setDestino(String Destino) {
-    this.Destino = Destino;
+  public void setCompanhia(String companhia) {
+    this.companhia = companhia;
   }
 
-  public String getCompanhiaNome() {
-    return this.companhiaNome;
+  public String getCliente() {
+    return this.cliente;
   }
 
-  public void setCompanhiaNome(String companhiaNome) {
-    this.companhiaNome = companhiaNome;
+  public void setCliente(String cliente) {
+    this.cliente = cliente;
   }
 
-  public String getClienteNome() {
-    return this.ClienteNome;
-  }
+  public Passagem converter(ClienteRepository clienteRepository, CompanhiaRepository companhiaRepository,
+      EscalaRepository escalaRepository) {
 
-  public void setClienteNome(String ClienteNome) {
-    this.ClienteNome = ClienteNome;
-  }
+    Cliente nomeCli = clienteRepository.findByNome(cliente);
+    Companhia nomeComp = companhiaRepository.findByNome(companhia);
+    Escala escalaId = escalaRepository.getReferenceById(escala);
 
-  public Passagem converter(ClienteRepository clienteRepository, CompanhiaRepository companhiaRepository) {
+    System.out.println(nomeComp.getNome());
+    System.out.println(nomeCli.getNome());
+    System.out.println("origem" + escalaId.getOrigem());
+    System.out.println("destino" + escalaId.getDestino());
 
-    Cliente cliente = clienteRepository.findByNome(ClienteNome);
-    Companhia companhia = companhiaRepository.findByNome(companhiaNome);
-
-    System.out.println(companhia.getNome());
-    System.out.println(cliente.getNome());
-
-    return new Passagem(Origem, Destino, companhia, cliente);
+    return new Passagem(escalaId, nomeComp, nomeCli);
   }
 
 }

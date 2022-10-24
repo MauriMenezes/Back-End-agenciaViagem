@@ -16,9 +16,9 @@ public class PassagemDTO {
   public PassagemDTO(Passagem passagem) {
 
     this.id = passagem.getId();
-    this.origem = passagem.getOrigem();
-    this.destino = passagem.getDestino();
-    this.dataCriacao = passagem.getDataCriacao();
+    this.origem = passagem.getEscala().getOrigem();
+    this.destino = passagem.getEscala().getDestino();
+    this.dataCriacao = passagem.getEscala().getDataCriacao();
     this.nomeCliente = passagem.getCliente().getNome();
     this.nomeCompanhia = passagem.getCompanhia().getNome();
   }

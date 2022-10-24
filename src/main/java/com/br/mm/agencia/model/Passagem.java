@@ -1,11 +1,10 @@
 package com.br.mm.agencia.model;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -14,10 +13,8 @@ public class Passagem {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
-
-  private LocalDateTime dataCriacao = LocalDateTime.now();
-  private String Origem;
-  private String Destino;
+  @ManyToOne
+  private Escala escala;
   @OneToOne
   private Companhia companhia;
   @OneToOne
@@ -26,11 +23,8 @@ public class Passagem {
   public Passagem() {
   }
 
-  public Passagem(String Origem, String Destino, Companhia companhia,
-      Cliente cliente) {
-
-    this.Origem = Origem;
-    this.Destino = Destino;
+  public Passagem(Escala escala, Companhia companhia, Cliente cliente) {
+    this.escala = escala;
     this.companhia = companhia;
     this.cliente = cliente;
   }
@@ -43,28 +37,12 @@ public class Passagem {
     this.id = id;
   }
 
-  public LocalDateTime getDataCriacao() {
-    return this.dataCriacao;
+  public Escala getEscala() {
+    return this.escala;
   }
 
-  public void setDataCriacao(LocalDateTime dataCriacao) {
-    this.dataCriacao = dataCriacao;
-  }
-
-  public String getOrigem() {
-    return this.Origem;
-  }
-
-  public void setOrigem(String Origem) {
-    this.Origem = Origem;
-  }
-
-  public String getDestino() {
-    return this.Destino;
-  }
-
-  public void setDestino(String Destino) {
-    this.Destino = Destino;
+  public void setVoo(Escala escala) {
+    this.escala = escala;
   }
 
   public Companhia getCompanhia() {

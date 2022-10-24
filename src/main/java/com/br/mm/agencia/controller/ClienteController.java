@@ -64,15 +64,18 @@ public class ClienteController {
   public ResponseEntity<ClienteDTO> cadastrar(@RequestBody @Valid ClienteForm form, UriComponentsBuilder uriBuilder) {
 
     Optional<Cliente> cli = clienteRepository.findByEmail(form.getEmail());
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    Cliente cliente = form.converter(encoder);
 
     if (cli.isPresent()) {
+      System.out.println("já existe no banco");
       return ResponseEntity.badRequest().build();
-    } else {
 
-      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-      Cliente cliente = form.converter(encoder);
+    } else {
+      System.out.println("não  existe no banco");
+
       clienteRepository.save(cliente);
-      URI uri = uriBuilder.path("/agenda/cadastrar/{id}").buildAndExpand(cliente.getId()).toUri();
+      URI uri = uriBuilder.path("/cadastrar/{id}").buildAndExpand(cliente.getId()).toUri();
       return ResponseEntity.created(uri).body(new ClienteDTO(cliente));
     }
 
